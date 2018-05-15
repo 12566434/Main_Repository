@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_local_movies_black_24dp"
+        android:title="Recommendations" />
+    <item
+        android:id="@+id/navigation_wave"
+        android:icon="@drawable/ic_pan_tool_black_24dp"
+        android:title="Wave" />
+    <item
+        android:id="@+id/navigation_genres"
+        android:icon="@drawable/ic_playlist_play_black_24dp"
+        android:title="Genres" />
+    <item
+        android:id="@+id/navigation_trending"
+        android:icon="@drawable/ic_whatshot_black_24dp"
+        android:title="Trending" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="Settings" />
+
+</menu>
