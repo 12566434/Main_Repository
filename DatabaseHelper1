@@ -1,0 +1,136 @@
+package com.example.salman.databaseexample;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Movie;
+
+import android.database.sqlite.SQLiteDatabase;
+import android.media.Rating;
+
+import java.util.ArrayList;
+
+
+class DatabaseManager extends SQLiteOpenHelper {
+    public Movie movie;
+    private static final String DATABASE_NAME = "cinemaDB";
+    private static final int DATABASE_VERSION = 1;
+    private static final String TABLE_MOVIE = "movie";
+    private static final String ID = "id";
+    private static final String NAME = "name";
+    private static final String DESCRIPTION = "description";
+    private static final String RATING = "rating";
+
+
+    public DatabaseManager(Context context) {
+
+        super(context, DATABASE_NAME, null, 1);
+
+    }
+
+
+    public void onCreate(SQLiteDatabase db) {
+        String sqlCreate = " create table " + TABLE_MOVIE + "(" + ID;
+        sqlCreate +=   "integer primary key autoincrement, " + NAME;
+        sqlCreate += "text" + DESCRIPTION;
+        sqlCreate += " text, " + RATING + " real)";
+        db.execSQL(sqlCreate);
+        //db.execSQL(" create table " + TABLE_MOVIE + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT, DATE STRING,  )");
+    }
+
+
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("drop table if exists " + TABLE_MOVIE);
+        onCreate(db);
+    }
+
+
+    public void insert(com.example.salman.databaseexample.Movie movie){
+        movie.getClass();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sqlInsert = "insert into " + TABLE_MOVIE;
+        sqlInsert += " values(null, '" + movie.getName();
+        sqlInsert += "', '" + movie.getMovieRating();
+        sqlInsert += "', '" + movie.getMovieDescription() + ",)";
+
+
+        db.execSQL(sqlInsert);
+        db.close();
+
+    }
+
+    /*
+    public boolean insertData(String name, String description, int rating) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(NAME, name);
+        contentValues.put(DESCRIPTION, description);
+        contentValues.put(RATING, rating);
+        long result = db.insert(TABLE_MOVIE, null, contentValues);
+        if(result == -1)
+            return false;
+        else
+            return true;
+    }
+    */
+    public Cursor getAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+TABLE_MOVIE,null);
+        return res;
+    }
+
+    public void deleteById(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sqlDelete = "delete from " + TABLE_MOVIE;
+        sqlDelete += " where " + ID + " = " + id;
+
+        db.execSQL(sqlDelete);
+        db.close();
+    }
+
+    public void updateByID(int id, String name, String movieDescription, int movieRating) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sqlUpdate = "update " + TABLE_MOVIE;
+        sqlUpdate += " set " + NAME + " = '" + name + "', ";
+        sqlUpdate += DESCRIPTION + " = '" + movieDescription + "'";
+        sqlUpdate += RATING + " = '" + movieRating + "'";
+        sqlUpdate += " where " + ID + " = " + id;
+
+        db.execSQL(sqlUpdate);
+        db.close();
+
+    }
+
+    public ArrayList<com.example.salman.databaseexample.Movie> selectAll(){
+        String sqlQuery = "select * from " + TABLE_MOVIE;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sqlQuery, null);
+
+        ArrayList<com.example.salman.databaseexample.Movie> movies = new ArrayList<com.example.salman.databaseexample.Movie>();
+        while (cursor.moveToNext()) {
+            com.example.salman.databaseexample.Movie currentMovie
+                    = new com.example.salman.databaseexample.Movie(Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1), cursor.getDouble(2));
+            movies.add(currentMovie);
+
+        }
+        db.close();
+        return movies;
+
+    }
+
+    public com.example.salman.databaseexample.Movie selectByID(int ID){
+        String sqlQuery = "select * from " + TABLE_MOVIE;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sqlQuery, null);
+
+        com.example.salman.databaseexample.Movie movie = null;
+        if(cursor.moveToFirst())
+            movie = new com.example.salman.databaseexample.Movie(Integer.parseInt(cursor.getString(0)),
+                      cursor.getString(1), cursor.getDouble(2));
+
+
+        return movie;
+    }
+
+}
